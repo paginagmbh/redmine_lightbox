@@ -3,7 +3,12 @@ $(document).ready(function() {
 			prevEffect		: 'none',
 			nextEffect		: 'none',
 			openSpeed		: 400, 
-			closeSpeed		: 200
+			closeSpeed		: 200,
+			helpers: {
+				overlay: {
+					locked: false
+				}
+			}
 		});
 
     $("div.attachments a.pdf").fancybox({
@@ -16,6 +21,11 @@ $(document).ready(function() {
 			autoSize		: true,
 			iframe : {
 				preload: false
+			},
+			helpers: {
+				overlay: {
+					locked: false
+				}
 			}
 		});
 });
