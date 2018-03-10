@@ -8,7 +8,8 @@ $(document).ready(function() {
   });
 
   // modify thumbnails and magnifier links in journal details -> add filename to url to support fancybox preview
-  $("div.journal div.thumbnails a, div.journal ul.details li a:not([title])").attr('href', function(i, v){
+  // also modify thumbnail previews in journal
+  $("div.journal div.thumbnails a, div.journal.attachments a, div.journal ul.details li a:not([title])").attr('href', function(i, v){
     if($(this).attr('href').match(extensionRegex)) {
       return v.replace(/\/attachments\/(\d+)/g,'/attachments/download/$1');
     } else {
