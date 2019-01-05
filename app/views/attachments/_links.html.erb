@@ -59,30 +59,34 @@
 </tr>
 <% end %>
 </table>
-<% if defined?(thumbnails) && thumbnails %>
-  <% images = attachments.select(&:thumbnailable?) %>
-  <% if images.any? %>
-  <div class="thumbnails images">
-    <% images.each do |attachment| %>
-      <div>
-        <%=
-          link_to image_tag(url_for(:controller => 'attachments', :action => 'thumbnail', :id => attachment)),
-          {:controller => 'attachments', :action => 'download', :id => attachment, :filename => attachment.filename},
-          :class => ('lightbox' + (attachment.is_pdf? ? ' pdf' : '')) , :rel => 'thumbnails', :title => "#{attachment.filename}#{ ('-' + attachment.description) unless attachment.description.blank? }"
-        %>
-      </div>
+
+<% if defined?(Setting.thumbnails_enabled) && Setting.thumbnails_enabled?  %>
+  <% if defined?(thumbnails) && thumbnails %>
+    <% images = attachments.select(&:thumbnailable?) %>
+    <% if images.any? %>
+    <div class="thumbnails images">
+      <% images.each do |attachment| %>
+        <div>
+          <%=
+            link_to image_tag(url_for(:controller => 'attachments', :action => 'thumbnail', :id => attachment)),
+            {:controller => 'attachments', :action => 'download', :id => attachment, :filename => attachment.filename},
+            :class => ('lightbox' + (attachment.is_pdf? ? ' pdf' : '')) , :rel => 'thumbnails', :title => "#{attachment.filename}#{ ('-' + attachment.description) unless attachment.description.blank? }"
+          %>
+        </div>
+      <% end %>
+    </div>
     <% end %>
-  </div>
+  <% else %>
+  	  <% images = attachments.select { |a| a.image? } %>
+	  <% unless images.empty? %>
+	    <div class='images'>
+	      <% images.each do |attachment| %>
+	        <%= link_to image_tag(url_for({:controller => 'attachments', :action => 'download', :id => attachment, :filename => attachment.filename }), :width => Setting.thumbnails_size),
+	        {:controller => 'attachments', :action => 'download', :id => attachment, :filename => attachment.filename }, :class => 'lightbox', :rel => 'thumbnails', :title => "#{attachment.filename}#{ ('-' + attachment.description) unless attachment.description.blank? }" %>
+	      <% end -%>
+	    </div>
+	  <% end -%>
   <% end %>
-<% else %>
-	<% images = attachments.select { |a| a.image? } %>
-	<% unless images.empty? %>
-	  <div class='images'>
-	    <% images.each do |attachment| %>
-	      <%= link_to image_tag(url_for({:controller => 'attachments', :action => 'download', :id => attachment, :filename => attachment.filename }), :width => '180'),
-	      {:controller => 'attachments', :action => 'download', :id => attachment, :filename => attachment.filename }, :class => 'lightbox', :rel => 'thumbnails', :title => "#{attachment.filename}#{ ('-' + attachment.description) unless attachment.description.blank? }" %>
-	    <% end -%>
-	  </div>
-	<% end -%>
 <% end %>
+
 </div>
